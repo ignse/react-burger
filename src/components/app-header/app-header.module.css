@@ -1,0 +1,38 @@
+.trait
+{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.header {
+  width: 1240px;
+  justify-content: space-between;
+  composes: trait;
+}
+
+.nav, .logo
+{
+  flex-grow: 1;
+  composes: trait;
+}
+
+.profile
+{
+  flex-grow: 1;
+  composes: trait;
+  justify-content: flex-end;
+}
+
+.btn {
+  cursor: pointer;
+  text-decoration: none;
+  opacity: 80%;
+  composes: trait;
+  color: inherit;
+}
+
+.btn:hover
+{
+  opacity: 100%;
+}

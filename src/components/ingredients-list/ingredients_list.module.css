@@ -1,0 +1,36 @@
+.section {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 580px;
+}
+
+.section_title {
+  display: flex;
+}
+
+.section_name {
+  display: flex;
+  flex-direction: row;
+}
+
+.ingredient {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.counter {
+  float: right;
+}
+
+.image, .price {
+  display: flex;
+}
+
+.name {
+  display: flex;
+  text-align: center;
+}
