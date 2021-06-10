@@ -11,21 +11,19 @@ class BurgerIngredients extends React.Component {
         super(props);
 
         this.state = {
-            active_tab: 'bun',
+            activeTab: 'bun',
             types : [
-                {name: 'bun', title: 'Булки'},
-                {name: 'main', title: 'Начинки'},
-                {name: 'sauce', title: 'Соусы'}
+                {name: 'bun', title: 'Булки', ref: React.createRef()},
+                {name: 'main', title: 'Начинки', ref: React.createRef()},
+                {name: 'sauce', title: 'Соусы', ref: React.createRef()}
             ]
         }
     }
 
-    setCurrent = tab_name => () => {
-        this.setState({...this.state, active_tab: tab_name})
+    setCurrent = tabName => () => {
+        this.setState({...this.state, activeTab: tabName})
 
-        const url = window.location.href;
-        window.location.href = '#' + tab_name;
-        window.history.replaceState(null, null, url);
+        this.state.types.filter(item => item.name === tabName)[0].ref.current.scrollIntoView();
     }
 
     render() {
@@ -37,7 +35,7 @@ class BurgerIngredients extends React.Component {
                     </p>
                     <div style={{ display: 'flex' }}>
                         {this.state.types.map((item) => (
-                            <Tab key={item.name} value={item.name} active={this.state.active_tab === item.name} onClick={this.setCurrent(item.name)}>
+                            <Tab key={item.name} value={item.name} active={this.state.activeTab === item.name} onClick={this.setCurrent(item.name)}>
                                 {item.title}
                             </Tab>
                         ))}
@@ -45,7 +43,7 @@ class BurgerIngredients extends React.Component {
                 </section>
                 <section className={styles.scrollable}>
                     {this.state.types.map((item) => (
-                        <IngredientsList key={item.name} title={item.title} name={item.name}>
+                        <IngredientsList key={item.name} sectionRef={item.ref} title={item.title} name={item.name}>
                             {this.props.data.map((ingridient, index) => ingridient.type === item.name && ingridient && <Ingredient key={index} data={ingridient} />)}
                         </IngredientsList>
                     ))}

@@ -32,7 +32,7 @@ Ingredient.propTypes = {
         price: PropTypes.number,
         image: PropTypes.string,
         count: PropTypes.number
-    }
-)};
+    }).isRequired
+};
 
 export default Ingredient;

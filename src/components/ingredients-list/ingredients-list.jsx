@@ -8,9 +8,9 @@ class IngredientsList extends React.Component {
         return (
             <>
                 <section className={`${styles.section_name} mt-10`}>
-                    <a className='text text_type_main-medium' name={this.props.name}>
+                    <label className='text text_type_main-medium' ref={this.props.sectionRef}>
                         {this.props.title}
-                    </a>
+                    </label>
                 </section>
                 <section className={styles.section_title}>
                         <section className={styles.section}>
