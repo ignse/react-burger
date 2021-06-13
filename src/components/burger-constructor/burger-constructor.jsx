@@ -3,9 +3,29 @@ import styles from './burger-constructor.module.css';
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerItem from '../burger-item/burger-item';
 import PropTypes from 'prop-types';
-import BurgerIngredients from '../burger-ingredients/burger-ingredients';
+import OrderDetails from '../order-details/order-details';
 
 class BurgerConstructor extends React.Component {
+
+    state = {
+        detailsVisible: false
+    }
+
+    showDetails = e => {
+        if (this.state.detailsVisible) {
+            this.hideDetails(e);
+        }
+        else {
+            this.setState({detailsVisible: true})
+        }
+    }
+
+    hideDetails = e => {
+        this.setState({detailsVisible: false});
+
+        e.stopPropagation();
+    }
+
     render()
     {
         const bun = this.props.data.filter(item => item.type === 'bun')[0];
@@ -34,11 +54,12 @@ class BurgerConstructor extends React.Component {
                         {total}&nbsp;<span><CurrencyIcon type="primary" /></span>
                     </p>
                     <span className={`${styles.total_text} ml-10`}>
-                        <Button type="primary" size="medium">
+                        <Button type="primary" size="medium" onClick={this.showDetails}>
                             Оформить заказ
                         </Button>
                     </span>
                 </section>
+                {this.state.detailsVisible && (<OrderDetails orderNumber={Math.ceil(Math.random()*1000000).toString()} onClose={this.hideDetails} />)}
             </section>
         );
     }

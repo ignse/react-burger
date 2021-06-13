@@ -5,18 +5,20 @@ import PropTypes from 'prop-types';
 class BurgerItem extends React.Component {
     render()
     {
-        const className = (this.props.type !== 'top' ? 'pt-4' : '') + (this.props.isLocked ? ' ml-7' : '');
+        const {type, isLocked, data} = this.props;
+
+        const className = (type !== 'top' ? 'pt-4' : '') + (isLocked ? ' ml-7' : '');
 
         return (
             <span className={className}>
-             {!this.props.isLocked && (<DragIcon />)}
+             {!isLocked && (<DragIcon />)}
              <ConstructorElement
-                type={this.props.type}
-                isLocked={this.props.isLocked}
-                key={this.props.data._id}
-                text={this.props.data.name}
-                price={this.props.data.price}
-                thumbnail={this.props.data.image}
+                type={type}
+                isLocked={isLocked}
+                key={data._id}
+                text={data.name}
+                price={data.price}
+                thumbnail={data.image}
              />
             </span>
         );
@@ -24,11 +26,13 @@ class BurgerItem extends React.Component {
 }
 
 BurgerItem.propTypes = {
-    _id: PropTypes.string,
-    name: PropTypes.string,
+    data: PropTypes.shape({
+        _id: PropTypes.string,
+        name: PropTypes.string,
+        price: PropTypes.number,
+        image: PropTypes.string
+    }),
     type: PropTypes.string,
-    price: PropTypes.number,
-    image: PropTypes.string,
     isLocked: PropTypes.bool
 };
 

@@ -21,9 +21,12 @@ class BurgerIngredients extends React.Component {
     }
 
     setCurrent = tabName => () => {
-        this.setState({...this.state, activeTab: tabName})
+        if (this.props.data.length)
+        {
+            this.setState({...this.state, activeTab: tabName});
 
-        this.state.types.filter(item => item.name === tabName)[0].ref.current.scrollIntoView();
+            this.state.types.filter(item => item.name === tabName)[0].ref.current.scrollIntoView();
+        }
     }
 
     render() {
@@ -42,11 +45,11 @@ class BurgerIngredients extends React.Component {
                     </div>
                 </section>
                 <section className={styles.scrollable}>
-                    {this.state.types.map((item) => (
+                    {this.props.data.length ? this.state.types.map((item) => (
                         <IngredientsList key={item.name} sectionRef={item.ref} title={item.title} name={item.name}>
                             {this.props.data.map((ingridient, index) => ingridient.type === item.name && ingridient && <Ingredient key={index} data={ingridient} />)}
                         </IngredientsList>
-                    ))}
+                    )) : (this.props.loading && !this.props.hasError ? 'Загрузка...' : 'Произошла ошибка, попробуйте перезагрузить страницу.')}
                 </section>
             </section>
         );
@@ -54,7 +57,22 @@ class BurgerIngredients extends React.Component {
 }
 
 BurgerIngredients.propTypes = {
-    data: PropTypes.arrayOf(Object)
-};
+    data: PropTypes.arrayOf(PropTypes.shape({
+        _id: PropTypes.string,
+        name: PropTypes.string,
+        type: PropTypes.string,
+        proteins: PropTypes.number,
+        fat: PropTypes.number,
+        carbohydrates: PropTypes.number,
+        calories: PropTypes.number,
+        price: PropTypes.number,
+        image: PropTypes.string,
+        image_mobile: PropTypes.string,
+        image_large: PropTypes.string,
+        __v: PropTypes.number
+    })),
+    loading: PropTypes.bool,
+    hasError: PropTypes.bool
+}
 
  export default BurgerIngredients;

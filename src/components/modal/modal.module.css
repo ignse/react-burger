@@ -1,0 +1,30 @@
+.modal {
+  width: 720px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  flex-direction: column;
+  background-color: #1C1C21;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  flex-grow: 1;
+}
+
+.close {
+  display: flex;
+  cursor: pointer;
+}
+
+.title {
+  display: flex;
+  flex-grow: 1;
+}
