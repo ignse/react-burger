@@ -4,6 +4,7 @@ import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-comp
 import BurgerItem from '../burger-item/burger-item';
 import PropTypes from 'prop-types';
 import OrderDetails from '../order-details/order-details';
+import Modal from '../modal/modal';
 
 class BurgerConstructor extends React.Component {
 
@@ -12,12 +13,9 @@ class BurgerConstructor extends React.Component {
     }
 
     showDetails = e => {
-        if (this.state.detailsVisible) {
-            this.hideDetails(e);
-        }
-        else {
-            this.setState({detailsVisible: true})
-        }
+        this.setState({detailsVisible: true});
+
+        e.stopPropagation();
     }
 
     hideDetails = e => {
@@ -59,7 +57,11 @@ class BurgerConstructor extends React.Component {
                         </Button>
                     </span>
                 </section>
-                {this.state.detailsVisible && (<OrderDetails orderNumber={Math.ceil(Math.random()*1000000).toString()} onClose={this.hideDetails} />)}
+                {this.state.detailsVisible && (
+                    <Modal onClose={this.hideDetails}>
+                        <OrderDetails orderNumber={Math.ceil(Math.random()*1000000).toString()} />
+                    </Modal>
+                )}
             </section>
         );
     }

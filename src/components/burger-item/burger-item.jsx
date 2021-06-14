@@ -31,7 +31,7 @@ BurgerItem.propTypes = {
         name: PropTypes.string,
         price: PropTypes.number,
         image: PropTypes.string
-    }),
+    }).isRequired,
     type: PropTypes.string,
     isLocked: PropTypes.bool
 };

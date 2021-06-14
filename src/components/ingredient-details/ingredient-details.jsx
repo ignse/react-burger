@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Modal from '../modal/modal';
 import styles from '../ingredient-details/ingredient_details.module.css';
 
 class IngredientDetails extends React.Component {
     render()
     {
-        const {ingredient, onClose} = this.props;
+        const {ingredient} = this.props;
 
         const options = [
             {field: 'calories', title: 'Калории,ккал'},
@@ -16,25 +15,23 @@ class IngredientDetails extends React.Component {
         ];
 
         return (
-            <Modal header={'Детали ингредиента'} onClose={onClose}>
-                <section>
-                    <span className={styles.image}>
-                        <img src={ingredient.image} alt={ingredient.name}/>
-                    </span>
+            <section>
+                <span className={styles.image}>
+                    <img src={ingredient.image} alt={ingredient.name}/>
+                </span>
 
-                    <p className={`${styles.name} text text_type_main-default mt-4`}>
-                        {ingredient.name}
-                    </p>
-                    <section className={`${styles.line} mb-15 mt-8`}>
-                        {options.map((option) => (
-                            <span key={option.field} className={`${styles.info} text text_type_main-default`}>
-                                {option.title}
-                                <p className='text text_type_main-medium'>{ingredient[option.field]}</p>
-                            </span>
-                        ))}
-                    </section>
+                <p className={`${styles.name} text text_type_main-default mt-4`}>
+                    {ingredient.name}
+                </p>
+                <section className={`${styles.line} mb-15 mt-8`}>
+                    {options.map((option) => (
+                        <span key={option.field} className={`${styles.info} text text_type_main-default`}>
+                            {option.title}
+                            <p className='text text_type_main-medium'>{ingredient[option.field]}</p>
+                        </span>
+                    ))}
                 </section>
-            </Modal>
+            </section>
         );
     }
 }
@@ -53,8 +50,7 @@ IngredientDetails.propTypes = {
         image_mobile: PropTypes.string,
         image_large: PropTypes.string,
         __v: PropTypes.number
-    }).isRequired,
-    onClose: PropTypes.func
+    }).isRequired
 }
 
 export default IngredientDetails;

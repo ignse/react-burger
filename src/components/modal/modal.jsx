@@ -50,9 +50,9 @@ class Modal extends React.Component {
 }
 
 ModalOverlay.propTypes = {
-    children: PropTypes.array,
+    children: PropTypes.element,
     header: PropTypes.string,
-    onClose: PropTypes.func
+    onClose: PropTypes.func.isRequired
 }
 
 export default Modal;

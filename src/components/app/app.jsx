@@ -16,7 +16,13 @@ class App extends React.Component {
 
     getIngredientsData = async () => {
         await fetch(config.apiUrl + '/api/ingredients')
-            .then(res => res.json())
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+
+                return Promise.reject(`Ошибка ${res.status}`);
+            })
             .then(data => this.setState({ data: data.data, loading: false }))
             .catch(e => this.setState({ ...this.state, loading: false, hasError: true }))
     }

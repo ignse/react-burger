@@ -2,35 +2,14 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styles from './ingredients_list.module.css';
 import { CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components'
-import IngredientDetails from '../ingredient-details/ingredient-details';
 
 class Ingredient extends React.Component {
-
-	state = {
-		detailsVisible: false
-	}
-
-	showDetails = e => {
-		if (this.state.detailsVisible) {
-			this.hideDetails(e);
-		}
-		else {
-			this.setState({detailsVisible: true})
-		}
-	}
-
-	hideDetails = e => {
-		this.setState({detailsVisible: false});
-
-		e.stopPropagation();
-	}
-
-	render()
+  render()
   {
-      const {data} = this.props;
+      const {data, onShowDetails} = this.props;
 
       return (
-        <section className={`${styles.ingredient} mt-6`} onClick={this.showDetails}>
+        <section id={data._id} className={`${styles.ingredient} mt-6`} onClick={onShowDetails}>
           {data.count && <span className={styles.counter}><Counter count={data.count} size='default'/></span>}
             <span className={styles.image}>
                 <img src={data.image} alt={data.name}/>
@@ -43,7 +22,6 @@ class Ingredient extends React.Component {
             <p className={`${styles.name} text text_type_main-default`}>
               {data.name}
             </p>
-            {this.state.detailsVisible && (<IngredientDetails ingredient={data} onClose={this.hideDetails}/>)}
         </section>
       )
   }
@@ -51,11 +29,13 @@ class Ingredient extends React.Component {
 
 Ingredient.propTypes = {
     data: PropTypes.shape({
+        _id: PropTypes.string,
         name: PropTypes.string,
         price: PropTypes.number,
         image: PropTypes.string,
         count: PropTypes.number
-    }).isRequired
+    }).isRequired,
+    onShowDetails: PropTypes.func
 };
 
 export default Ingredient;
