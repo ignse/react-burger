@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './app-header.module.css';
 import PropTypes from 'prop-types';
-import BurgerConstructor from '../burger-constructor/burger-constructor';
 
 class HeaderBtn extends React.Component {
     render() {

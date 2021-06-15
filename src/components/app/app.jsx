@@ -1,19 +1,42 @@
 import React from 'react';
 import styles from './app.module.css';
-import data from '../../utils/data';
 import defaultData from '../../utils/default-data';
+import config from '../../utils/config';
 import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
 
-
 class App extends React.Component {
-  render() {
+
+    state = {
+        data: [],
+        loading: true,
+        hasError: false
+    }
+
+    getIngredientsData = async () => {
+        await fetch(config.apiUrl + '/api/ingredients')
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+
+                return Promise.reject(`Ошибка ${res.status}`);
+            })
+            .then(data => this.setState({ data: data.data, loading: false }))
+            .catch(e => this.setState({ ...this.state, loading: false, hasError: true }))
+    }
+
+    componentDidMount() {
+        this.getIngredientsData()
+    }
+
+    render() {
       return (
         <div className={styles.content}>
             <AppHeader />
             <main className={styles.main}>
-                <BurgerIngredients data={data} />
+                <BurgerIngredients {...this.state} />
                 <BurgerConstructor data={defaultData} />
             </main>
         </div>
