@@ -1,20 +1,41 @@
-import React from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import styles from './app.module.css';
-import defaultData from '../../utils/default-data';
 import config from '../../utils/config';
 import AppHeader from '../app-header/app-header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
 import BurgerConstructor from '../burger-constructor/burger-constructor';
+import {BurgerContext} from '../../services/burgerContext';
+import {IngredientsContext} from '../../services/ingredientsContext';
 
-class App extends React.Component {
+const burgerInitialState = { total: 0, burger: [], orderDetailsVisible: false, orderNumber: 0};
 
-    state = {
+function App() {
+
+    const [ingredientsState, setIngredientsState] = useState({
         data: [],
         loading: true,
         hasError: false
+    });
+
+    const [burgerState, burgerDispatcher] = useReducer(reducer, burgerInitialState);
+
+    function reducer(state, action) {
+
+        switch (action.type) {
+            case 'init':
+                return {...state, burger: action.data};
+            case 'total':
+                return {...state, total: state.burger && state.burger.length ? state.burger.reduce((acc, {price}) => acc + price, 0) : 0};
+            case 'showDetails':
+                return {...state, orderDetailsVisible: true, orderNumber: action.number.toString()};
+            case 'hideDetails':
+                return {...state, orderDetailsVisible: false};
+            default:
+                throw new Error(`Wrong type of action: ${action.type}`);
+        }
     }
 
-    getIngredientsData = async () => {
+    const getIngredientsData = async () => {
         await fetch(config.apiUrl + '/api/ingredients')
             .then(res => {
                 if (res.ok) {
@@ -23,25 +44,27 @@ class App extends React.Component {
 
                 return Promise.reject(`Ошибка ${res.status}`);
             })
-            .then(data => this.setState({ data: data.data, loading: false }))
-            .catch(e => this.setState({ ...this.state, loading: false, hasError: true }))
+            .then(data => setIngredientsState({ data: data.data, loading: false }))
+            .catch(e => setIngredientsState({ ...this.state, loading: false, hasError: true }))
     }
 
-    componentDidMount() {
-        this.getIngredientsData()
-    }
+    useEffect(() => {
+        getIngredientsData()
+    }, []);
 
-    render() {
-      return (
+    return (
         <div className={styles.content}>
             <AppHeader />
             <main className={styles.main}>
-                <BurgerIngredients {...this.state} />
-                <BurgerConstructor data={defaultData} />
+                <IngredientsContext.Provider value={{ ingredientsState, setIngredientsState }}>
+                    <BurgerIngredients />
+                    <BurgerContext.Provider value={{ burgerState, burgerDispatcher }}>
+                        <BurgerConstructor />
+                    </BurgerContext.Provider>
+                </IngredientsContext.Provider>
             </main>
         </div>
-      );
-  }
+    );
 }
 
 export default App;

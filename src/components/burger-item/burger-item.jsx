@@ -8,6 +8,7 @@ class BurgerItem extends React.Component {
         const {type, isLocked, data} = this.props;
 
         const className = (type !== 'top' ? 'pt-4' : '') + (isLocked ? ' ml-7' : '');
+        const namePrefix = type ? (type === 'top' ? ' (верх)' : ' (низ)') : '';
 
         return (
             <span className={className}>
@@ -15,8 +16,7 @@ class BurgerItem extends React.Component {
              <ConstructorElement
                 type={type}
                 isLocked={isLocked}
-                key={data._id}
-                text={data.name}
+                text={data.name + namePrefix}
                 price={data.price}
                 thumbnail={data.image}
              />
