@@ -25,7 +25,7 @@ function App() {
             case 'init':
                 return {...state, burger: action.data};
             case 'total':
-                return {...state, total: state.burger && state.burger.length ? state.burger.reduce((acc, {price}) => acc + price, 0) : 0};
+                return {...state, total: state.burger && state.burger.length ? state.burger.reduce((acc, p) => acc + p.price * (p.type ===  'bun' ? 2 : 1), 0) : 0};
             case 'showDetails':
                 return {...state, orderDetailsVisible: true, orderNumber: action.number.toString()};
             case 'hideDetails':
