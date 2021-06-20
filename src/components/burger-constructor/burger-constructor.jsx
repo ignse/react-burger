@@ -43,25 +43,19 @@ function BurgerConstructor() {
     }
 
     function getRandomBurger() {
-        let burger = [];
-        let have_bun = false;
+        const burger = [];
 
         if (ingredientsState.data.length === 0) {
             return burger;
         }
 
+        const buns = ingredientsState.data.filter(item => item.type === "bun");
+        const other = ingredientsState.data.filter(item => item.type !== "bun");
+
+        burger.push(buns[Math.floor(Math.random() * buns.length)]);
+
         for (let i = 0; i< 8; i++) {
-            let item = ingredientsState.data[Math.floor(Math.random() * ingredientsState.data.length)];
-
-            if (item.type === 'bun') {
-                if (have_bun) {
-                    continue;
-                }
-
-                have_bun = true;
-            }
-
-            burger.push(item);
+            burger.push(other[Math.floor(Math.random() * other.length)]);
         }
 
         return burger;
