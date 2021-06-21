@@ -1,74 +1,117 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import styles from './burger-constructor.module.css';
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerItem from '../burger-item/burger-item';
-import PropTypes from 'prop-types';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
+import {BurgerContext} from '../../services/burgerContext';
+import {IngredientsContext} from '../../services/ingredientsContext';
+import config from '../../utils/config';
 
-class BurgerConstructor extends React.Component {
+function BurgerConstructor() {
+    const {ingredientsState} = useContext(IngredientsContext);
+    const {burgerState, burgerDispatcher} = useContext(BurgerContext);
 
-    state = {
-        detailsVisible: false
-    }
+    function showDetails(e) {
 
-    showDetails = e => {
-        this.setState({detailsVisible: true});
+        fetch(config.apiUrl + '/api/orders', {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({
+                ingredients: burgerState.burger.map(item => item._id)
+            })
+        })
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            }
+
+            return Promise.reject(`Ошибка ${res.status}`);
+        })
+        .then(data =>  burgerDispatcher({type: 'showDetails', number: data.order.number}))
+        .catch(e => burgerDispatcher({type: 'showDetails', number: ''}));
 
         e.stopPropagation();
     }
 
-    hideDetails = e => {
-        this.setState({detailsVisible: false});
+    function hideDetails(e) {
+        burgerDispatcher({type: 'hideDetails'});
 
         e.stopPropagation();
     }
 
-    render()
-    {
-        const bun = this.props.data.filter(item => item.type === 'bun')[0];
+    function getRandomBurger() {
+        const burger = [];
 
-        const other = this.props.data.filter(item => item.type !== 'bun');
+        if (ingredientsState.data.length === 0) {
+            return burger;
+        }
 
-        const total = other.reduce((acc, p) => acc + p.price, 0) + bun.price * 2;
+        const buns = ingredientsState.data.filter(item => item.type === "bun");
+        const other = ingredientsState.data.filter(item => item.type !== "bun");
 
-        return (
-            <section className={`${styles.list} mt-25`}>
-                <BurgerItem
-                    type="top"
-                    isLocked={true}
-                    data={bun}
-                />
-                <section className={styles.scrollable}>
-                    {other.map(item => (<BurgerItem key={item._id} data={item} />))}
-                </section>
-                <BurgerItem
-                    type="bottom"
-                    isLocked={true}
-                    data={bun}
-                />
-                <section className={`${styles.total} mt-10 mr-10 pr-3`}>
-                    <p className={`${styles.total_text} text text_type_digits-medium`}>
-                        {total}&nbsp;<span><CurrencyIcon type="primary" /></span>
-                    </p>
-                    <span className={`${styles.total_text} ml-10`}>
-                        <Button type="primary" size="medium" onClick={this.showDetails}>
-                            Оформить заказ
-                        </Button>
-                    </span>
-                </section>
-                {this.state.detailsVisible && (
-                    <Modal onClose={this.hideDetails}>
-                        <OrderDetails orderNumber={Math.ceil(Math.random()*1000000).toString()} />
-                    </Modal>
-                )}
+        burger.push(buns[Math.floor(Math.random() * buns.length)]);
+
+        for (let i = 0; i< 8; i++) {
+            burger.push(other[Math.floor(Math.random() * other.length)]);
+        }
+
+        return burger;
+    }
+
+    useEffect(()=>{
+        burgerDispatcher({type: 'init', data: getRandomBurger()});
+        burgerDispatcher({type: 'total'});
+    }, [ingredientsState.data]);
+
+    const bun = burgerState.burger ? burgerState.burger.filter(item => item.type === 'bun')[0] : [];
+
+    const other = burgerState.burger ? burgerState.burger.filter(item => item.type !== 'bun') : [];
+
+    return (
+        <section className={`${styles.list} mt-25`}>
+            {bun && <BurgerItem
+                type="top"
+                isLocked={true}
+                data={bun}
+            />}
+
+            {other && <section className={styles.scrollable}>
+                {other.map((item, index) => (<BurgerItem key={item._id + index} data={item} />))}
+            </section>}
+
+            {bun && <BurgerItem
+                type="bottom"
+                isLocked={true}
+                data={bun}
+            />}
+
+            <section className={`${styles.total} mt-10 mr-10 pr-3`}>
+                <p className={`${styles.total_text} text text_type_digits-medium`}>
+                    {burgerState.total}&nbsp;<span><CurrencyIcon type="primary" /></span>
+                </p>
+                <span className={`${styles.total_text} ml-10`}>
+                    <Button type="primary" size="medium" onClick={showDetails}>
+                        Оформить заказ
+                    </Button>
+                </span>
             </section>
-        );
-    }
+            {burgerState.orderDetailsVisible && burgerState.orderNumber && (
+                <Modal onClose={hideDetails}>
+                    <OrderDetails />
+                </Modal>
+            )}
+            {burgerState.orderDetailsVisible && !burgerState.orderNumber && (
+                <Modal onClose={hideDetails}>
+                   <p className='text text_type_main-medium mb-15'>
+                       Ошибка при оформлении заказа!
+                   </p>
+                </Modal>
+            )}
+        </section>
+    );
 }
-
-BurgerConstructor.propTypes = {
-    data: PropTypes.arrayOf(Object)
-};
 
 export default BurgerConstructor;
