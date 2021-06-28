@@ -1,12 +1,10 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import styles from '../order-details/order-details.module.css'
 import img from '../../images/done.png'
-import {BurgerContext} from '../../services/burgerContext';
+import {useSelector} from 'react-redux';
 
 function OrderDetails() {
-    const {burgerState} = useContext(BurgerContext);
-
-    const {orderNumber} = burgerState;
+    const { orderNumber } = useSelector(store => store.order);
 
     return (
         <section className={styles.details}>

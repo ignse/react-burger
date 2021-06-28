@@ -1,19 +1,19 @@
-import React, {useContext, useState} from 'react';
+import React, { useState, useEffect, useRef, useCallback} from 'react';
 import styles from './burger-ingredients.module.css';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientsList from '../ingredients-list/ingredients-list';
 import Ingredient from '../ingredients-list/ingredient';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
-import {IngredientsContext} from '../../services/ingredientsContext';
+import { getIngredients } from '../../services/actions/ingredients';
+import {useDispatch, useSelector} from 'react-redux';
+import {HIDE_INGREDIENT_DETAILS, SHOW_INGREDIENT_DETAILS} from '../../services/actions/modal';
+import {CLEAR_INGREDIENT_DETAIL, SET_INGREDIENT_DETAIL} from '../../services/actions/inrgedientInfo';
 
 function BurgerIngredients() {
 
-    const {ingredientsState} = useContext(IngredientsContext);
-
     const [state, setState] = useState({
         activeTab: 'bun',
-        selectedIngredient: null,
         types : [
             {name: 'bun', title: 'Булки', ref: React.createRef()},
             {name: 'main', title: 'Начинки', ref: React.createRef()},
@@ -21,20 +21,61 @@ function BurgerIngredients() {
         ]
     });
 
+    const dispatch = useDispatch();
+
+    const { items, itemsRequest, itemsFailed } = useSelector(store => store.ingredients);
+    const { ingredient } = useSelector(store => store.info);
+
+    useEffect(
+        () => {
+            if (!items.length) {
+                dispatch(getIngredients());
+            }
+        },
+        [dispatch, items.length]
+    );
+
+    const containerRef = useRef(null);
+
+    const handleScroll = useCallback(() => {
+        let activeTab = '';
+        let min = 0;
+
+        state.types.forEach(item => {
+           const top = +item.ref.current.getBoundingClientRect().top;
+
+           if (activeTab === '' && top > 0) {
+               activeTab = item.name;
+               min = top;
+           }
+
+           if (top < min && top > 0) {
+               activeTab = item.name;
+               min = top;
+           }
+        });
+
+        if (activeTab) {
+            setState({...state, activeTab: activeTab});
+        }
+    }, [state]);
+
     const showDetails = details => (e) => {
-        setState({...state, selectedIngredient: details})
+        dispatch({type: SET_INGREDIENT_DETAIL, payload: details});
+        dispatch({type: SHOW_INGREDIENT_DETAILS});
 
         e.stopPropagation();
     }
 
     const hideDetails = e => {
-        setState({...state, selectedIngredient: null});
+        dispatch({type: CLEAR_INGREDIENT_DETAIL});
+        dispatch({type: HIDE_INGREDIENT_DETAILS});
 
         e.stopPropagation();
     }
 
     const setCurrent = tabName => () => {
-        if (ingredientsState.data.length)
+        if (items.length)
         {
             setState({...state, activeTab: tabName});
 
@@ -57,17 +98,17 @@ function BurgerIngredients() {
                         ))}
                     </div>
                 </section>
-                <section className={styles.scrollable}>
-                    {ingredientsState.data.length ? state.types.map((item) => (
+                <section className={styles.scrollable} onScroll={handleScroll} ref={containerRef}>
+                    {items.length ? state.types.map((item) => (
                         <IngredientsList key={item.name} sectionRef={item.ref} title={item.title} name={item.name}>
-                            {ingredientsState.data.map((ingridient, index) => ingridient.type === item.name && ingridient && <Ingredient key={index} data={ingridient} onShowDetails={showDetails(ingridient)} />)}
+                            {items.map((ingredient, index) => ingredient.type === item.name && ingredient && <Ingredient key={index} data={ingredient} onShowDetails={showDetails(ingredient)} />)}
                         </IngredientsList>
-                    )) : (ingredientsState.loading && !ingredientsState.hasError ? 'Загрузка...' : 'Произошла ошибка, попробуйте перезагрузить страницу.')}
+                    )) : (itemsRequest && !itemsFailed ? 'Загрузка...' : 'Произошла ошибка, попробуйте перезагрузить страницу.')}
                 </section>
             </section>
-            {state.selectedIngredient && (
+            {ingredient.name && (
                 <Modal header={'Детали ингредиента'} onClose={hideDetails}>
-                    <IngredientDetails ingredient={state.selectedIngredient}/>
+                    <IngredientDetails ingredient={ingredient}/>
                 </Modal>
             )}
         </>

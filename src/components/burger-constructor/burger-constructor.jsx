@@ -1,96 +1,92 @@
-import React, {useContext, useEffect} from 'react';
+import React, { useCallback } from 'react';
 import styles from './burger-constructor.module.css';
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerItem from '../burger-item/burger-item';
 import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
-import {BurgerContext} from '../../services/burgerContext';
-import {IngredientsContext} from '../../services/ingredientsContext';
-import config from '../../utils/config';
+import {useDispatch, useSelector} from 'react-redux';
+import {useDrop} from 'react-dnd';
+import {ADD_INGREDIENT, DELETE_INGREDIENT, MOVE_INGREDIENT, CLEAR_CART} from '../../services/actions/cart';
+import {HIDE_ORDER_DETAILS} from '../../services/actions/modal';
+import {makeOrder} from '../../services/actions/order';
 
 function BurgerConstructor() {
-    const {ingredientsState} = useContext(IngredientsContext);
-    const {burgerState, burgerDispatcher} = useContext(BurgerContext);
+    const dispatch = useDispatch();
+
+    const { bun, items, total } = useSelector(store => store.cart);
+    const { orderNumber } = useSelector(store => store.order);
+    const { orderDetailsVisible } = useSelector(store => store.modal);
+
+
+    const handleDrop = (data) => {
+           dispatch({
+               type: ADD_INGREDIENT,
+               data
+           });
+    };
+
+    const handleDelete = index => (e) => {
+        e.stopPropagation();
+        dispatch({ type: DELETE_INGREDIENT, payload: index});
+
+    };
+
+    const handleMove = useCallback((dragIndex, hoverIndex) => {
+        dispatch({
+            type: MOVE_INGREDIENT,
+            payload: {currentIndex: dragIndex, newIndex: hoverIndex}
+        });
+    }, [dispatch]);
+
+
+    const [, dropTarget] = useDrop({
+        accept: "ingredient",
+        drop: handleDrop
+    });
+
 
     function showDetails(e) {
 
-        fetch(config.apiUrl + '/api/orders', {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify({
-                ingredients: burgerState.burger.map(item => item._id)
-            })
-        })
-        .then(res => {
-            if (res.ok) {
-                return res.json();
-            }
+        const ingredients = items.map(item => item._id);
 
-            return Promise.reject(`Ошибка ${res.status}`);
-        })
-        .then(data =>  burgerDispatcher({type: 'showDetails', number: data.order.number}))
-        .catch(e => burgerDispatcher({type: 'showDetails', number: ''}));
+        if (bun.name)
+        {
+            ingredients.push(bun._id);
+        }
+
+        dispatch(makeOrder(ingredients));
 
         e.stopPropagation();
     }
 
     function hideDetails(e) {
-        burgerDispatcher({type: 'hideDetails'});
+         dispatch({type: HIDE_ORDER_DETAILS});
+         dispatch({type: CLEAR_CART});
 
         e.stopPropagation();
     }
 
-    function getRandomBurger() {
-        const burger = [];
-
-        if (ingredientsState.data.length === 0) {
-            return burger;
-        }
-
-        const buns = ingredientsState.data.filter(item => item.type === "bun");
-        const other = ingredientsState.data.filter(item => item.type !== "bun");
-
-        burger.push(buns[Math.floor(Math.random() * buns.length)]);
-
-        for (let i = 0; i< 8; i++) {
-            burger.push(other[Math.floor(Math.random() * other.length)]);
-        }
-
-        return burger;
-    }
-
-    useEffect(()=>{
-        burgerDispatcher({type: 'init', data: getRandomBurger()});
-        burgerDispatcher({type: 'total'});
-    }, [ingredientsState.data]);
-
-    const bun = burgerState.burger ? burgerState.burger.filter(item => item.type === 'bun')[0] : [];
-
-    const other = burgerState.burger ? burgerState.burger.filter(item => item.type !== 'bun') : [];
-
     return (
-        <section className={`${styles.list} mt-25`}>
-            {bun && <BurgerItem
+        <section className={`${styles.list} mt-25`} ref={dropTarget}>
+            {bun.name && (<BurgerItem
                 type="top"
                 isLocked={true}
                 data={bun}
-            />}
+            />)}
 
-            {other && <section className={styles.scrollable}>
-                {other.map((item, index) => (<BurgerItem key={item._id + index} data={item} />))}
+            {items && <section className={styles.scrollable}>
+                {items.map((item, index) => (<BurgerItem key={item.key} id={item.key} data={item} index={index} handleDelete={handleDelete(index)} handleMove={handleMove} />))}
             </section>}
 
-            {bun && <BurgerItem
+            {bun.name && (<BurgerItem
                 type="bottom"
                 isLocked={true}
                 data={bun}
-            />}
+            />)}
 
             <section className={`${styles.total} mt-10 mr-10 pr-3`}>
                 <p className={`${styles.total_text} text text_type_digits-medium`}>
-                    {burgerState.total}&nbsp;<span><CurrencyIcon type="primary" /></span>
+                    {total}&nbsp;<span><CurrencyIcon type="primary" /></span>
                 </p>
                 <span className={`${styles.total_text} ml-10`}>
                     <Button type="primary" size="medium" onClick={showDetails}>
@@ -98,12 +94,12 @@ function BurgerConstructor() {
                     </Button>
                 </span>
             </section>
-            {burgerState.orderDetailsVisible && burgerState.orderNumber && (
+            {orderDetailsVisible && orderNumber && (
                 <Modal onClose={hideDetails}>
                     <OrderDetails />
                 </Modal>
             )}
-            {burgerState.orderDetailsVisible && !burgerState.orderNumber && (
+            {orderDetailsVisible && !orderNumber && (
                 <Modal onClose={hideDetails}>
                    <p className='text text_type_main-medium mb-15'>
                        Ошибка при оформлении заказа!
