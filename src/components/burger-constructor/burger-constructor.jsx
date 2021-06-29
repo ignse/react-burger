@@ -6,15 +6,15 @@ import OrderDetails from '../order-details/order-details';
 import Modal from '../modal/modal';
 import {useDispatch, useSelector} from 'react-redux';
 import {useDrop} from 'react-dnd';
-import {ADD_INGREDIENT, DELETE_INGREDIENT, MOVE_INGREDIENT, CLEAR_CART} from '../../services/actions/cart';
-import {HIDE_ORDER_DETAILS} from '../../services/actions/modal';
-import {makeOrder} from '../../services/actions/order';
+import {ADD_INGREDIENT, DELETE_INGREDIENT, MOVE_INGREDIENT} from '../../services/actions/cart';
+import {HIDE_ORDER_DETAILS, SHOW_ORDER_DETAILS} from '../../services/actions/modal';
+import {MAKE_ORDER_INVALID, makeOrder} from '../../services/actions/order';
 
 function BurgerConstructor() {
     const dispatch = useDispatch();
 
     const { bun, items, total } = useSelector(store => store.cart);
-    const { orderNumber } = useSelector(store => store.order);
+    const { orderNumber, orderInvalid} = useSelector(store => store.order);
     const { orderDetailsVisible } = useSelector(store => store.modal);
 
 
@@ -49,19 +49,26 @@ function BurgerConstructor() {
 
         const ingredients = items.map(item => item._id);
 
+        const isValid = ingredients.length && bun.name;
+
         if (bun.name)
         {
             ingredients.push(bun._id);
         }
 
-        dispatch(makeOrder(ingredients));
+        if (isValid) {
+            dispatch(makeOrder(ingredients));
+        }
+        else {
+            dispatch({type: MAKE_ORDER_INVALID});
+            dispatch({type: SHOW_ORDER_DETAILS});
+        }
 
         e.stopPropagation();
     }
 
     function hideDetails(e) {
          dispatch({type: HIDE_ORDER_DETAILS});
-         dispatch({type: CLEAR_CART});
 
         e.stopPropagation();
     }
@@ -94,16 +101,23 @@ function BurgerConstructor() {
                     </Button>
                 </span>
             </section>
-            {orderDetailsVisible && orderNumber && (
+            {orderDetailsVisible && orderNumber && !orderInvalid && (
                 <Modal onClose={hideDetails}>
                     <OrderDetails />
                 </Modal>
             )}
-            {orderDetailsVisible && !orderNumber && (
+            {orderDetailsVisible && !orderNumber && !orderInvalid && (
                 <Modal onClose={hideDetails}>
                    <p className='text text_type_main-medium mb-15'>
                        Ошибка при оформлении заказа!
                    </p>
+                </Modal>
+            )}
+            {orderDetailsVisible && orderInvalid && (
+                <Modal onClose={hideDetails}>
+                    <p className='text text_type_main-medium mb-15 ml-15 mt-5'>
+                        Наличие булок и минимум одного ингридиента обязательно!
+                    </p>
                 </Modal>
             )}
         </section>

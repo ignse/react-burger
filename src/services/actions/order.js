@@ -1,9 +1,11 @@
 import config from '../../utils/config';
 import {SHOW_ORDER_DETAILS} from './modal';
+import {CLEAR_CART} from './cart';
 
 export const MAKE_ORDER_REQUEST = 'MAKE_ORDER_REQUEST';
 export const MAKE_ORDER_SUCCESS = 'MAKE_ORDER_SUCCESS';
 export const MAKE_ORDER_FAILED = 'MAKE_ORDER_FAILED';
+export const MAKE_ORDER_INVALID = 'MAKE_ORDER_INVALID';
 
 export function makeOrder(ingredients) {
   return function(dispatch) {
@@ -26,7 +28,10 @@ export function makeOrder(ingredients) {
 
       return Promise.reject(`Ошибка ${res.status}`);
     })
-    .then(data => dispatch({ type: MAKE_ORDER_SUCCESS, payload: data.order.number}))
+    .then((data) => {
+      dispatch({ type: MAKE_ORDER_SUCCESS, payload: data.order.number})
+      dispatch({type: CLEAR_CART});
+    })
     .catch(e => dispatch({
       type: MAKE_ORDER_FAILED
     }))
