@@ -16,7 +16,7 @@ function BurgerConstructor() {
     const { bun, items, total } = useSelector(store => store.cart);
     const { orderNumber, orderInvalid} = useSelector(store => store.order);
     const { orderDetailsVisible } = useSelector(store => store.modal);
-
+    const { user } = useSelector(store => store.user);
 
     const handleDrop = (data) => {
            dispatch({
@@ -49,7 +49,7 @@ function BurgerConstructor() {
 
         const ingredients = items.map(item => item._id);
 
-        const isValid = ingredients.length && bun.name;
+        const isValid = ingredients.length && bun.name && user.name;
 
         if (bun.name)
         {
@@ -116,7 +116,7 @@ function BurgerConstructor() {
             {orderDetailsVisible && orderInvalid && (
                 <Modal onClose={hideDetails}>
                     <p className='text text_type_main-medium mb-15 ml-15 mt-5'>
-                        Наличие булок и минимум одного ингридиента обязательно!
+                        Только авторизированный пользователь может создать заказ! Наличие булок и минимум одного ингридиента обязательно!
                     </p>
                 </Modal>
             )}

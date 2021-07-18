@@ -9,12 +9,14 @@
   width: 1240px;
   justify-content: space-between;
   composes: trait;
+  background-color: #1C1C21;
 }
 
 .nav, .logo
 {
   flex-grow: 1;
   composes: trait;
+  width: 450px;
 }
 
 .profile
@@ -27,12 +29,12 @@
 .btn {
   cursor: pointer;
   text-decoration: none;
-  opacity: 80%;
   composes: trait;
+  opacity: 50%;
   color: inherit;
 }
 
-.btn:hover
+.btn:hover, .active
 {
   opacity: 100%;
 }

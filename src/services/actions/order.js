@@ -1,6 +1,8 @@
 import config from '../../utils/config';
 import {SHOW_ORDER_DETAILS} from './modal';
 import {CLEAR_CART} from './cart';
+import {getCookie} from '../../utils/cookie';
+import { fetchWithRefresh } from './user';
 
 export const MAKE_ORDER_REQUEST = 'MAKE_ORDER_REQUEST';
 export const MAKE_ORDER_SUCCESS = 'MAKE_ORDER_SUCCESS';
@@ -12,21 +14,15 @@ export function makeOrder(ingredients) {
     dispatch({
       type: MAKE_ORDER_REQUEST
     });
-    fetch(config.apiUrl + '/api/orders', {
+    fetchWithRefresh(config.apiUrl + '/api/orders', {
       headers: {
         'Content-Type': 'application/json'
       },
       method: 'POST',
       body: JSON.stringify({
+        authorization: getCookie('accessToken'),
         ingredients: ingredients
       })
-    })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Ошибка ${res.status}`);
     })
     .then((data) => {
       dispatch({ type: MAKE_ORDER_SUCCESS, payload: data.order.number})
