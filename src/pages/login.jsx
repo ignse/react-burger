@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {Link, Redirect} from 'react-router-dom';
+import {Link, Redirect, useLocation} from 'react-router-dom';
 import styles from './home.module.css';
 import AppHeader from '../components/app-header/app-header';
 
@@ -11,16 +11,19 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {loginUser, USER_CLEAR_ERROR} from '../services/actions/user';
 import Modal from '../components/modal/modal';
+import {getCookie} from '../utils/cookie';
 
 export function LoginPage() {
 
     const [form, setValue] = useState({ email: '', password: '' });
 
+    const location = useLocation();
+
     const onChange = e => {
         setValue({ ...form, [e.target.name]: e.target.value });
     };
 
-    const { user, loginUserError} = useSelector(store => store.user);
+    const { loginUserError} = useSelector(store => store.user);
 
     const dispatch = useDispatch();
 
@@ -36,12 +39,10 @@ export function LoginPage() {
         dispatch({type: USER_CLEAR_ERROR});
     }
 
-    if (user.name) {
+    if (getCookie('accessToken')) {
         return (
             <Redirect
-                to={{
-                    pathname: '/'
-                }}
+                to={ location.state?.from || '/' }
             />
         );
     }

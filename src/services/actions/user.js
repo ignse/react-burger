@@ -48,7 +48,7 @@ export function registerUser(user) {
       dispatch({ type: REGISTER_USER_SUCCESS, payload: data})
     })
     .catch(e => dispatch({
-      type: LOGIN_USER_FAILED,
+      type: REGISTER_USER_FAILED,
       payload: e.message
     }))
   }
@@ -91,7 +91,7 @@ export function loadUser(afterLoad) {
     })
         .then((data) => {
           dispatch({ type: USER_LOAD_DATA_SUCCESS, payload: data})
-          afterLoad(data.user);
+          afterLoad({...data.user, password: ''});
         })
         .catch(e => dispatch({
           type: USER_LOAD_DATA_FAILED,

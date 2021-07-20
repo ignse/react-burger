@@ -12,6 +12,7 @@ import {
     ResetPasswordPage
 } from '../../pages';
 import {ProtectedRoute} from '../protected-route/protected-route';
+import {NonAuthRoute} from '../nonauth-route/nonauth-route';
 
 function Routes() {
     let history = useHistory();
@@ -25,12 +26,12 @@ function Routes() {
                 <Route path="/" exact={true}>
                     <HomePage />
                 </Route>
-                <Route path="/register" exact={true}>
+                <NonAuthRoute path="/register" exact={true}>
                     <RegisterPage />
-                </Route>
-                <Route path="/login" exact={true}>
+                </NonAuthRoute>
+                <NonAuthRoute path="/login" exact={true}>
                     <LoginPage />
-                </Route>
+                </NonAuthRoute>
                 <ProtectedRoute path="/profile" exact={true}>
                     <ProfilePage />
                 </ProtectedRoute>
@@ -46,12 +47,12 @@ function Routes() {
                 <Route path="/feed/:id" exact={true}>
                     <OrderPage />
                 </Route>
-                <ProtectedRoute path="/forgot-password" exact={true}>
+                <NonAuthRoute path="/forgot-password" exact={true}>
                     <ForgotPasswordPage />
-                </ProtectedRoute>
-                <ProtectedRoute path="/reset-password" exact={true}>
+                </NonAuthRoute>
+                <NonAuthRoute path="/reset-password" exact={true}>
                     <ResetPasswordPage />
-                </ProtectedRoute>
+                </NonAuthRoute>
                 <Route path="/ingredients/:id">
                     <IngredientPage />
                 </Route>

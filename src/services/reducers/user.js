@@ -79,7 +79,7 @@ export const userReducer = (state = initialState, action) => {
       setCookie('accessToken', action.payload.accessToken);
       localStorage.setItem('refreshToken', action.payload.refreshToken);
 
-      return { ...state, registerUserFailed: false, registerUserError: '', registerUserRequest: false, user: action.payload.user};
+      return { ...state, registerUserFailed: false, registerUserSuccess: true, registerUserError: '', registerUserRequest: false, user: action.payload.user};
     }
     case REGISTER_USER_FAILED: {
       return { ...initialState, registerUserFailed: true, registerUserRequest: false, registerUserError: action.payload };
@@ -105,7 +105,7 @@ export const userReducer = (state = initialState, action) => {
       deleteCookie('accessToken');
       localStorage.removeItem('refreshToken');
 
-      return { ...state, logoutUserFailed: false, logoutUserSuccess: true, logoutUserError: '', logoutUserRequest: false, user: {name: '', email: ''}};
+      return { ...initialState, logoutUserSuccess: true};
     }
     case LOGOUT_USER_FAILED: {
       return { ...initialState, logoutUserFailed: true, logoutUserRequest: false, logoutUserError: action.payload };
@@ -157,7 +157,7 @@ export const userReducer = (state = initialState, action) => {
       return { ...state, resetPasswordRequest: true };
     }
     case RESET_PASSWORD_SUCCESS: {
-      return { ...state, resetPasswordFailed: false, resetPasswordError: '', resetPasswordRequest: false, resetPasswordSuccess: true};
+      return { ...state, resetPasswordFailed: false, resetPasswordError: '', resetPasswordRequest: false, resetPasswordSuccess: true, forgotPasswordSuccess: false};
     }
     case RESET_PASSWORD_FAILED: {
       return { ...initialState, resetPasswordFailed: true, resetPasswordError: action.payload };

@@ -1,17 +1,18 @@
 import React, {useCallback} from 'react';
 import PropTypes from 'prop-types';
 import styles from '../../pages/profile.module.css';
-import {NavLink, useHistory} from 'react-router-dom';
+import {NavLink, Redirect, useLocation} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {logoutUser, USER_CLEAR_ERROR} from '../../services/actions/user';
 import Modal from '../modal/modal';
+import {getCookie} from '../../utils/cookie';
 
 function ProfileMenu(props) {
 
     const { logoutUserSuccess , logoutUserError } = useSelector(store => store.user);
 
     const dispatch = useDispatch();
-    const history = useHistory();
+    const location = useLocation();
 
     const logout = useCallback(
         e => {
@@ -25,8 +26,15 @@ function ProfileMenu(props) {
         dispatch({type: USER_CLEAR_ERROR});
     }
 
-    if (logoutUserSuccess) {
-        history.push({ pathname: `/login`});
+    if (logoutUserSuccess && !getCookie('accessToken')) {
+        return (
+            <Redirect
+                to={{
+                    pathname: '/login',
+                    state: { from: location }
+                }}
+            />
+        );
     }
 
     return (

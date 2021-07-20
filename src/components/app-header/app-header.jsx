@@ -20,8 +20,7 @@ function AppHeader() {
                <Logo />
            </span>
            <span className={styles.profile}>
-               {!user.name && (<HeaderBtn icon={<ProfileIcon/>} path={'/login'} text={'Личный кабинет'}/>)}
-               {user.name && (<HeaderBtn icon={<ProfileIcon/>} path={'/profile'} exact={false} text={user.name}/>)}
+              <HeaderBtn icon={<ProfileIcon/>} path={'/profile'} exact={false} text={user.name ? user.name : 'Личный кабинет'}/>
            </span>
        </header>
     );

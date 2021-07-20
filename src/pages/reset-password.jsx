@@ -13,7 +13,7 @@ import Modal from '../components/modal/modal';
 
 export function ResetPasswordPage() {
 
-    const { resetPasswordSuccess, resetPasswordError } = useSelector(store => store.user);
+    const { forgotPasswordSuccess, resetPasswordSuccess, resetPasswordError } = useSelector(store => store.user);
 
     const [form, setValue] = useState({ password: '', token: ''});
 
@@ -40,6 +40,16 @@ export function ResetPasswordPage() {
             <Redirect
                 to={{
                     pathname: '/login'
+                }}
+            />
+        );
+    }
+
+    if (!forgotPasswordSuccess) {
+        return (
+            <Redirect
+                to={{
+                    pathname: '/forgot-password'
                 }}
             />
         );

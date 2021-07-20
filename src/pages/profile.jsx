@@ -33,7 +33,7 @@ export function ProfilePage() {
     const cancel = useCallback(
         e => {
             e.preventDefault();
-            setValue(user.user)
+            setValue({...user.user, password: ''});
         },
         [user.user]
     );
@@ -85,7 +85,7 @@ export function ProfilePage() {
                         icon={'EditIcon'}
                         name={'password'}
                         onChange={onChange}
-                        value={'********'}
+                        value={form.password}
                     />
                 </span>
                 <span className='mt-5'>

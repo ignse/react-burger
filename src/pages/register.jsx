@@ -8,8 +8,9 @@ import {
     Button
 } from '@ya.praktikum/react-developer-burger-ui-components';
 import {useDispatch, useSelector} from 'react-redux';
-import {loginUser, registerUser, USER_CLEAR_ERROR} from '../services/actions/user';
+import {registerUser, USER_CLEAR_ERROR} from '../services/actions/user';
 import Modal from '../components/modal/modal';
+import {getCookie} from '../utils/cookie';
 
 export function RegisterPage() {
 
@@ -35,7 +36,7 @@ export function RegisterPage() {
         dispatch({type: USER_CLEAR_ERROR});
     }
 
-    if (user.name) {
+    if (user.registerUserSuccess) {
         return (
             <Redirect
                 to={{
@@ -59,6 +60,7 @@ export function RegisterPage() {
                     placeholder={'Имя'}
                     size={'default'}
                     name={'name'}
+                    value={form.name}
                     onChange={onChange}
                 />
             </span>
@@ -68,6 +70,7 @@ export function RegisterPage() {
                     placeholder={'E-mail'}
                     size={'default'}
                     name={'email'}
+                    value={form.email}
                     onChange={onChange}
                 />
             </span>
@@ -78,6 +81,7 @@ export function RegisterPage() {
                     size={'default'}
                     icon={'ShowIcon'}
                     name={'password'}
+                    value={form.password}
                     onChange={onChange}
                 />
             </span>
