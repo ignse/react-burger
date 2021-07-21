@@ -9,6 +9,7 @@ import {useDrop} from 'react-dnd';
 import {ADD_INGREDIENT, DELETE_INGREDIENT, MOVE_INGREDIENT} from '../../services/actions/cart';
 import {HIDE_ORDER_DETAILS, SHOW_ORDER_DETAILS} from '../../services/actions/modal';
 import {MAKE_ORDER_INVALID, makeOrder} from '../../services/actions/order';
+import {useHistory, useLocation} from 'react-router-dom';
 
 function BurgerConstructor() {
     const dispatch = useDispatch();
@@ -16,7 +17,10 @@ function BurgerConstructor() {
     const { bun, items, total } = useSelector(store => store.cart);
     const { orderNumber, orderInvalid} = useSelector(store => store.order);
     const { orderDetailsVisible } = useSelector(store => store.modal);
+    const { user } = useSelector(store => store.user);
 
+    const history = useHistory();
+    const location = useLocation();
 
     const handleDrop = (data) => {
            dispatch({
@@ -49,7 +53,7 @@ function BurgerConstructor() {
 
         const ingredients = items.map(item => item._id);
 
-        const isValid = ingredients.length && bun.name;
+        const isValid = ingredients.length && bun.name && user.name;
 
         if (bun.name)
         {
@@ -69,6 +73,10 @@ function BurgerConstructor() {
 
     function hideDetails(e) {
          dispatch({type: HIDE_ORDER_DETAILS});
+
+         if (!user.name) {
+             history.push({ pathname: `/login`, state: {from: location}});
+         }
 
         e.stopPropagation();
     }
@@ -116,7 +124,7 @@ function BurgerConstructor() {
             {orderDetailsVisible && orderInvalid && (
                 <Modal onClose={hideDetails}>
                     <p className='text text_type_main-medium mb-15 ml-15 mt-5'>
-                        Наличие булок и минимум одного ингридиента обязательно!
+                        Только авторизированный пользователь может создать заказ! Наличие булок и минимум одного ингридиента обязательно!
                     </p>
                 </Modal>
             )}

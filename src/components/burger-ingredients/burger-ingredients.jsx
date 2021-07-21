@@ -9,6 +9,7 @@ import { getIngredients } from '../../services/actions/ingredients';
 import {useDispatch, useSelector} from 'react-redux';
 import {HIDE_INGREDIENT_DETAILS, SHOW_INGREDIENT_DETAILS} from '../../services/actions/modal';
 import {CLEAR_INGREDIENT_DETAIL, SET_INGREDIENT_DETAIL} from '../../services/actions/inrgedientInfo';
+import {useHistory, useLocation} from 'react-router-dom';
 
 function BurgerIngredients() {
 
@@ -22,6 +23,8 @@ function BurgerIngredients() {
     });
 
     const dispatch = useDispatch();
+    const history = useHistory();
+    const location = useLocation();
 
     const { items, itemsRequest, itemsFailed } = useSelector(store => store.ingredients);
     const { ingredient } = useSelector(store => store.info);
@@ -63,6 +66,7 @@ function BurgerIngredients() {
     const showDetails = details => (e) => {
         dispatch({type: SET_INGREDIENT_DETAIL, payload: details});
         dispatch({type: SHOW_INGREDIENT_DETAILS});
+        history.push({ pathname: `/ingredients/${details._id}` , state: {background: location}});
 
         e.stopPropagation();
     }
@@ -70,6 +74,7 @@ function BurgerIngredients() {
     const hideDetails = e => {
         dispatch({type: CLEAR_INGREDIENT_DETAIL});
         dispatch({type: HIDE_INGREDIENT_DETAILS});
+        history.goBack();
 
         e.stopPropagation();
     }
