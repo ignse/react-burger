@@ -49,6 +49,13 @@
 .list {
   width: 272px;
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.caption {
+  width: 272px;
+  display: flex;
   flex-direction: column;
 }
 

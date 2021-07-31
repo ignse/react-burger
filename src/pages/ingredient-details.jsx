@@ -1,25 +1,14 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './home.module.css';
 import AppHeader from '../components/app-header/app-header';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import IngredientDetails from '../components/ingredient-details/ingredient-details';
-import {getIngredients} from '../services/actions/ingredients';
 
 export function IngredientPage() {
-    const dispatch = useDispatch();
     const { id } = useParams();
     const { items } = useSelector(store => store.ingredients);
     const ingredient = items.find(item => item._id === id);
-
-    useEffect(
-        () => {
-            if (!items.length) {
-                dispatch(getIngredients());
-            }
-        },
-        [dispatch, items.length]
-    );
 
     return (
       <div className={styles.content}>

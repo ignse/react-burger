@@ -10,7 +10,6 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {registerUser, USER_CLEAR_ERROR} from '../services/actions/user';
 import Modal from '../components/modal/modal';
-import {getCookie} from '../utils/cookie';
 
 export function RegisterPage() {
 
