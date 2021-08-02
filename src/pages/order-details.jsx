@@ -16,6 +16,6 @@ export function OrderPage() {
     }, []);
 
     return (
-        <Order order={order} />
+        order && <Order order={order} />
   )
 }

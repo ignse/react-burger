@@ -69,7 +69,7 @@ Order.propTypes = {
         status: PropTypes.string,
         ingredients: PropTypes.arrayOf(PropTypes.string),
         createdAt: PropTypes.string
-    })
+    }).isRequired
 };
 
 
