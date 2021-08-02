@@ -1,6 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import styles from './profile.module.css';
-import AppHeader from '../components/app-header/app-header';
 import {
     Input,
     Button
@@ -48,12 +47,11 @@ export function ProfilePage() {
     }
 
   return (
-      <div className={styles.content}>
-        <AppHeader />
         <main className={`${styles.profile} mt-30`}>
             {user.loadUserError && (<Modal header={'Ошибка'} onClose={closeError}><p className={`${styles.error} text_type_main-medium`}>{user.loadUserError}</p></Modal>)}
             {user.saveUserError && (<Modal header={'Ошибка'} onClose={closeError}><p className={`${styles.error} text_type_main-medium`}>{user.saveUserError}</p></Modal>)}
             <ProfileMenu decription={'В этом разделе вы можете изменить свои персональные данные'} />
+            <form onSubmit={save}>
             <section className={styles.section}>
                 <span className='mt-5 textbox'>
                     <Input
@@ -89,13 +87,13 @@ export function ProfilePage() {
                     />
                 </span>
                 <span className='mt-5'>
-                    <Button  onClick={save}>Сохранить</Button>
+                    <Button>Сохранить</Button>
                     <span className='ml-5'>
                         <Button onClick={cancel}>Отмена</Button>
                     </span>
                 </span>
             </section>
+            </form>
         </main>
-      </div>
   );
 }

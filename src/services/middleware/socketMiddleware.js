@@ -1,13 +1,21 @@
-export const socketMiddleware = (wsUrl, wsActions) => {
+import {getCookie} from '../../utils/cookie';
+
+export const socketMiddleware = (wsUrl, wsActions, useToken) => {
   return store => {
     let socket = null;
 
     return next => action => {
-      const { dispatch, getState } = store;
+      const { dispatch } = store;
       const { type, payload } = action;
       const { wsInit, wsSendMessage, onOpen, onClose, onError, onMessage } = wsActions;
       if (type === wsInit) {
-        socket = new WebSocket(wsUrl);
+        let accessToken = getCookie('accessToken') || '';
+
+        if (accessToken.indexOf('Bearer') === 0) {
+          accessToken = accessToken.split('Bearer ')[1];
+        }
+
+        socket = new WebSocket(wsUrl + (useToken ? `?token=${accessToken}` : ''));
       }
       if (socket) {
         socket.onopen = event => {

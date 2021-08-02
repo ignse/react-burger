@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import styles from './profile.module.css';
-import AppHeader from '../components/app-header/app-header';
 import {useDispatch, useSelector} from 'react-redux';
 import OrdersItem from '../components/orders-item/orders-item';
 import ProfileMenu from '../components/profile-menu/profile-menu';
@@ -39,8 +38,7 @@ export function OrdersPage() {
     const history = useHistory();
 
     return (
-      <div className={styles.content}>
-        <AppHeader />
+      <>
         <main className={`${styles.profile} mt-10`}>
             <span className='mt-20'>
                 <ProfileMenu decription={'В этом разделе вы можете просмотреть свою историю заказов'} />
@@ -56,6 +54,6 @@ export function OrdersPage() {
                   <Order order={order}/>
               </Modal>
           )}
-      </div>
+      </>
     );
 }

@@ -1,7 +1,6 @@
 import React, {useState, useCallback} from 'react';
 import {Link, Redirect, useLocation} from 'react-router-dom';
 import styles from './home.module.css';
-import AppHeader from '../components/app-header/app-header';
 
 import {
     Logo,
@@ -48,8 +47,7 @@ export function LoginPage() {
     }
 
     return (
-      <div className={styles.content}>
-        <AppHeader />
+      <form onSubmit={login}>
         <main className={`${styles.auth} ml-10 mt-10`}>
           <Logo />
           <p className="text text_type_main-default mt-10">
@@ -78,8 +76,8 @@ export function LoginPage() {
                 />
             </span>
           <span className='mt-5'>
-                <Button onClick={login}>Войти</Button>
-            </span>
+                <Button>Войти</Button>
+          </span>
         </main>
         <p className="text text_type_main-default mt-10 ml-4">
             Вы — новый пользователь? <Link to='/register' className={styles.link}>Зарегистрироваться</Link>
@@ -87,6 +85,6 @@ export function LoginPage() {
         <p className="text text_type_main-default mt-2 ml-4">
             Забыли пароль? <Link to='/forgot-password' className={styles.link}>Восстановить пароль</Link>
         </p>
-      </div>
+      </form>
   );
 }

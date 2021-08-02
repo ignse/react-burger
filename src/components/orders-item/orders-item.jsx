@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './orders-item.module.css'
 import {CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import {useSelector} from 'react-redux';
+import {reformatDate, getStatusName} from '../../utils/functions';
 
 function OrdersItem(props) {
 
@@ -11,24 +12,14 @@ function OrdersItem(props) {
     let total = 0;
     let hasBun = false;
 
-	const createDate = new Date(createdAt);
-	const daysDiff = Math.ceil(Math.abs(new Date().getTime() - createDate.getTime())/ (1000*3600*24));
-    let date = new Intl.DateTimeFormat('ru-ru',{
-		timeZoneName: 'short',
-		hour: '2-digit',
-		minute: '2-digit'
-	}).format(createDate);
-
-	date = daysDiff === 0 ? 'Сегодня, ' : (daysDiff === 1 ? 'Вчера, ' : (daysDiff < 5 ? daysDiff + ' дня назад, ' : daysDiff + ' дней назад, ')) + date;
-
     return (
         <div className={styles.section} onClick={onClick}>
             <section className={`${styles.row} mt-6`}>
                 <span className='text_type_digits-default ml-6'>#{number}</span>
-                <span className='text_type_main-default text_color_inactive mr-6'>{date}</span>
+                <span className='text_type_main-default text_color_inactive mr-6'>{reformatDate(createdAt)}</span>
             </section>
             <span className={`${styles.name} text_type_main-medium ml-6 mt-6`}>{name}</span>
-            {showStatus && (<span className='text_type_main-default ml-6 mt-2 mb-6'>{status}</span>)}
+            {showStatus && (<span className='text_type_main-default ml-6 mt-2 mb-6'>{getStatusName(status)}</span>)}
             <section className={`${styles.footer} mt-6 mb-6`}>
                 <div className={`${styles.picts} ml-6`}>
                     {ingredients.map((ingredientId, index) => {

@@ -1,7 +1,6 @@
 import React, {useEffect, useMemo} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import styles from './feed.module.css';
-import AppHeader from '../components/app-header/app-header';
 import OrdersItem from '../components/orders-item/orders-item';
 import {useDispatch, useSelector} from 'react-redux';
 import {WS_FEED_CONNECTION_START} from '../services/actions/wsFeedActions';
@@ -47,8 +46,7 @@ export function FeedPage() {
     }
 
     return (
-      <div className={styles.content}>
-        <AppHeader />
+      <>
         <span className={`${styles.title} text_type_main-large mt-10 mb-5`}>Лента заказов</span>
         <main className={`${styles.main}`}>
             <section className={styles.scrollable}>
@@ -86,6 +84,6 @@ export function FeedPage() {
                   <Order order={order}/>
               </Modal>
           )}
-      </div>
+      </>
     );
 }

@@ -1,7 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import styles from './home.module.css';
-import AppHeader from '../components/app-header/app-header';
 import {
   Logo,
   Input,
@@ -46,8 +45,7 @@ export function ForgotPasswordPage() {
     }
 
   return (
-      <div className={styles.content}>
-        <AppHeader />
+      <form onSubmit={forgotHandler}>
         <main className={`${styles.auth} ml-10 mt-10`}>
           <Logo />
           <p className="text text_type_main-default mt-10">
@@ -66,12 +64,12 @@ export function ForgotPasswordPage() {
                 />
           </span>
           <span className='mt-5'>
-            <Button onClick={forgotHandler}>Восстановить</Button>
+            <Button>Восстановить</Button>
           </span>
         </main>
         <p className="text text_type_main-default mt-10 ml-4">
             Вспомнили пароль? <Link to='/login' className={styles.link}>Войти</Link>
         </p>
-      </div>
+      </form>
   );
 }

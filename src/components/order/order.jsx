@@ -3,30 +3,15 @@ import styles from '../order/order.module.css'
 import img from '../../images/done.png'
 import {useSelector} from 'react-redux';
 import {CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
+import {getStatusName, reformatDate} from '../../utils/functions';
+import PropTypes from 'prop-types';
 
 function Order(props) {
     const { order } = props;
     const { items } = useSelector(store => store.ingredients);
 
-    const statuses = [];
-
-    statuses['done'] = 'Выполнен';
-    statuses['pending'] = 'В процессе';
-    statuses['created'] = 'Создан';
-
     let total = 0;
     let hasBun = false;
-
-    const createDate = new Date(order ? order.createdAt : null);
-    const daysDiff = Math.ceil(Math.abs(new Date().getTime() - createDate.getTime())/ (1000*3600*24));
-    let date = new Intl.DateTimeFormat('ru-ru',{
-        timeZoneName: 'short',
-        hour: '2-digit',
-        minute: '2-digit'
-    }).format(createDate);
-
-    date = daysDiff === 0 ? 'Сегодня, ' : (daysDiff === 1 ? 'Вчера, ' : (daysDiff < 5 ? daysDiff + ' дня назад, ' : daysDiff + ' дней назад, ')) + date;
-
 
     return (
         order && <main className={`${styles.order} ml-10 mt-10`}>
@@ -37,7 +22,7 @@ function Order(props) {
                {order.name}
             </span>
             <span className={`text_type_main-default mt-3 text_color_success ${order.status === 'done' ? styles.text_color_success : ''}`}>
-                {statuses[order.status]}
+                {getStatusName(order.status)}
             </span>
             <span className='text_type_main-medium mt-15 mb-2'>
                 Состав:
@@ -45,7 +30,7 @@ function Order(props) {
             <span className={styles.scrollable}>
             {order.ingredients.map(ingredientId => {
                 const ingredient = items.find(item => item._id === ingredientId);
-                if (ingredient === null) {
+                if (ingredient === null || typeof ingredient === "undefined") {
                     return '';
                 }
                 total += ingredient ? (ingredient.type === 'bun' ? (hasBun ? 0 : 2) : 1) * ingredient.price : 0;
@@ -70,11 +55,22 @@ function Order(props) {
             })}
             </span>
             <span className={`${styles.total} mt-10`}>
-                <span className='text_type_main-default text_color_inactive'>{date}</span>
+                <span className='text_type_main-default text_color_inactive'>{reformatDate(order ? order.createdAt : null)}</span>
                 <span className={`${styles.price} text_type_digits-default`}>{total} &nbsp;<CurrencyIcon type={'primary'} /></span>
             </span>
         </main>
     );
 }
+
+Order.propTypes = {
+    order: PropTypes.shape({
+        number: PropTypes.number,
+        name: PropTypes.string,
+        status: PropTypes.string,
+        ingredients: PropTypes.arrayOf(PropTypes.string),
+        createdAt: PropTypes.string
+    })
+};
+
 
 export default Order;
