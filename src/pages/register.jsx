@@ -1,7 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import styles from './home.module.css';
-import AppHeader from '../components/app-header/app-header';
 import {
     Logo,
     Input,
@@ -10,7 +9,6 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {registerUser, USER_CLEAR_ERROR} from '../services/actions/user';
 import Modal from '../components/modal/modal';
-import {getCookie} from '../utils/cookie';
 
 export function RegisterPage() {
 
@@ -46,8 +44,7 @@ export function RegisterPage() {
         );
     }
   return (
-      <div className={styles.content}>
-        <AppHeader />
+      <form onSubmit={register}>
         <main className={`${styles.auth} ml-10 mt-10`}>
             <Logo />
             <p className="text text_type_main-default mt-10">
@@ -86,12 +83,12 @@ export function RegisterPage() {
                 />
             </span>
             <span className='mt-5'>
-                <Button onClick={register}>Зарегистрироваться</Button>
+                <Button>Зарегистрироваться</Button>
             </span>
             <p className="text text_type_main-default mt-10 ml-4">
                 Уже зарегистрированы? <Link to='/login' className={styles.link}>Войти</Link>
             </p>
         </main>
-      </div>
+      </form>
   );
 }

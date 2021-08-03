@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback} from 'react';
+import React, { useState, useRef, useCallback} from 'react';
 import styles from './burger-ingredients.module.css';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientsList from '../ingredients-list/ingredients-list';
 import Ingredient from '../ingredients-list/ingredient';
 import IngredientDetails from '../ingredient-details/ingredient-details';
 import Modal from '../modal/modal';
-import { getIngredients } from '../../services/actions/ingredients';
 import {useDispatch, useSelector} from 'react-redux';
 import {HIDE_INGREDIENT_DETAILS, SHOW_INGREDIENT_DETAILS} from '../../services/actions/modal';
 import {CLEAR_INGREDIENT_DETAIL, SET_INGREDIENT_DETAIL} from '../../services/actions/inrgedientInfo';
@@ -28,15 +27,6 @@ function BurgerIngredients() {
 
     const { items, itemsRequest, itemsFailed } = useSelector(store => store.ingredients);
     const { ingredient } = useSelector(store => store.info);
-
-    useEffect(
-        () => {
-            if (!items.length) {
-                dispatch(getIngredients());
-            }
-        },
-        [dispatch, items.length]
-    );
 
     const containerRef = useRef(null);
 
