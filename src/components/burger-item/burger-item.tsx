@@ -1,4 +1,4 @@
-import React, {FC, SyntheticEvent, useRef} from 'react';
+import React, {FC, useRef} from 'react';
 import {ConstructorElement, DragIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import {useDrag, useDrop} from 'react-dnd';
 import {TIngredient} from "../../services/types/data";
@@ -9,7 +9,7 @@ export type TBurgerItem = {
     isLocked?: boolean;
     index: number;
     id?: string;
-    handleDelete?: Function;
+    handleDelete?: (index: number) => void;
     handleMove: Function;
 };
 
@@ -84,7 +84,7 @@ const BurgerItem: FC<TBurgerItem> = (props) => {
             text={data.name + namePrefix}
             price={data.price}
             thumbnail={data.image}
-            handleClose={isLocked ? () => {} : () => handleDelete}
+            handleClose={isLocked || !handleDelete ? () => {} : () => handleDelete(index)}
          />
         </span>
     );

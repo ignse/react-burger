@@ -1,4 +1,4 @@
-import React, {BaseSyntheticEvent, SyntheticEvent, useCallback} from 'react';
+import React, { SyntheticEvent, useCallback} from 'react';
 import styles from './burger-constructor.module.css';
 import {Button, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import BurgerItem from '../burger-item/burger-item';
@@ -30,11 +30,8 @@ const BurgerConstructor = () => {
            });
     };
 
-    const handleDelete = (index: number) => (e: SyntheticEvent) => {
-        alert('werterter');
-        e.stopPropagation();
+    const handleDelete = (index: number) => {
         dispatch({ type: DELETE_INGREDIENT, payload: index});
-
     };
 
     const handleMove = useCallback((dragIndex, hoverIndex) => {
@@ -50,7 +47,7 @@ const BurgerConstructor = () => {
         drop: handleDrop
     });
 
-    const showDetails = (e: SyntheticEvent) => {
+    const showDetails = () => {
         const ingredients = items.map(item => item._id);
 
         const isValid = ingredients.length && bun && user.name;
@@ -67,8 +64,6 @@ const BurgerConstructor = () => {
             dispatch({type: MAKE_ORDER_INVALID});
             dispatch({type: SHOW_ORDER_DETAILS});
         }
-
-        e.stopPropagation();
     }
 
     function hideDetails(e: SyntheticEvent) {
@@ -92,7 +87,7 @@ const BurgerConstructor = () => {
             />)}
 
             {items && <section className={styles.scrollable}>
-                {items.map((item, index) => (<BurgerItem key={item.key} id={item.key} data={item} index={index} handleDelete={handleDelete(index)} handleMove={handleMove} />))}
+                {items.map((item, index) => (<BurgerItem key={item.key} id={item.key} data={item} index={index} handleDelete={handleDelete} handleMove={handleMove} />))}
             </section>}
 
             {bun && (<BurgerItem
@@ -108,7 +103,7 @@ const BurgerConstructor = () => {
                     {total}&nbsp;<span><CurrencyIcon type="primary" /></span>
                 </p>
                 <span className={`${styles.total_text} ml-10`}>
-                    <Button type="primary" size="medium" onClick={() => showDetails}>
+                    <Button type="primary" size="medium" onClick={() => showDetails()}>
                         Оформить заказ
                     </Button>
                 </span>

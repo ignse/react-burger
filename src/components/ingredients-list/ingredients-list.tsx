@@ -1,14 +1,14 @@
-import React, {FC, LegacyRef, ReactChildren, ReactNode} from 'react';
+import React, {FC, LegacyRef, ReactNode} from 'react';
 import styles from './ingredients_list.module.css';
 
-type IngredientsList = {
+type TIngredientsList = {
     title: string;
     name: string;
     sectionRef: LegacyRef<HTMLLabelElement>;
     children?: ReactNode;
 };
 
-const IngredientsList: FC<IngredientsList> = (props) => {
+const IngredientsList: FC<TIngredientsList> = (props) => {
     return (
         <>
             <section className={`${styles.section_name} mt-10`}>

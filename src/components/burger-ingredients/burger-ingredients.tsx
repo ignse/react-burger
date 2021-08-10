@@ -1,4 +1,4 @@
-import React, {useState, useRef, useCallback, SyntheticEvent, Ref} from 'react';
+import React, {useState, useRef, useCallback, SyntheticEvent} from 'react';
 import styles from './burger-ingredients.module.css';
 import {Tab} from '@ya.praktikum/react-developer-burger-ui-components';
 import IngredientsList from '../ingredients-list/ingredients-list';

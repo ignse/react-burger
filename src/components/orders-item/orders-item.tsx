@@ -1,5 +1,4 @@
 import React, {FC, MouseEventHandler} from 'react';
-import PropTypes from 'prop-types';
 import styles from './orders-item.module.css'
 import {CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 import {useSelector} from '../../services/hooks';

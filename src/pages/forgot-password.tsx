@@ -1,4 +1,4 @@
-import React, {BaseSyntheticEvent, SyntheticEvent, useCallback, useState} from 'react';
+import React, {BaseSyntheticEvent, useCallback, useState} from 'react';
 import {Link, Redirect} from 'react-router-dom';
 import styles from './home.module.css';
 import {

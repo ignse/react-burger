@@ -1,5 +1,4 @@
 import React, {FC, useCallback} from 'react';
-import PropTypes from 'prop-types';
 import styles from '../../pages/profile.module.css';
 import {NavLink, Redirect, useLocation} from 'react-router-dom';
 import {useDispatch, useSelector} from '../../services/hooks';

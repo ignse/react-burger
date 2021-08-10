@@ -2,9 +2,9 @@ import config from '../../utils/config';
 import {SHOW_ORDER_DETAILS} from './modal';
 import {CLEAR_CART} from './cart';
 import {getCookie} from '../../utils/cookie';
-import {fetchWithRefresh, REGISTER_USER_FAILED, REGISTER_USER_REQUEST, REGISTER_USER_SUCCESS} from './user';
+import {fetchWithRefresh} from './user';
 import {AppDispatch, AppThunk} from "../types";
-import {TOrder, TUser} from "../types/data";
+import {TOrder} from "../types/data";
 
 export const MAKE_ORDER_REQUEST = 'MAKE_ORDER_REQUEST';
 export const MAKE_ORDER_SUCCESS = 'MAKE_ORDER_SUCCESS';

@@ -8,7 +8,7 @@ export function reformatDate(date: string): string
       minute: '2-digit'
    }).format(createDate);
 
-   const currentDate = new Date;
+   const currentDate = new Date();
    currentDate.setHours(0, 0, 0, 0);
    createDate.setHours(0, 0, 0, 0);
 
@@ -17,7 +17,7 @@ export function reformatDate(date: string): string
    return (daysDiff === 0 ? 'Сегодня, ' : (daysDiff === 1 ? 'Вчера, ' : (daysDiff < 5 ? daysDiff + ' дня назад, ' : daysDiff + ' дней назад, '))) + dateTime;
 }
 
-export function getStatusName(status: string) {
+export function getStatusName(status: string): string {
    const statuses: {[name: string]: string } = {
       "done": "Выполнен",
       "pending": "В процессе",

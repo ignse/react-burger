@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import { useParams } from 'react-router-dom';
 import Order from '../components/order/order';
 import {useDispatch, useSelector} from '../services/hooks';
-import {CLEAR_ORDER_DETAIL, getOrder, IClearOrderDetailAction} from '../services/actions/order';
+import {CLEAR_ORDER_DETAIL, getOrder} from '../services/actions/order';
 
 export function OrderPage() {
     const { id } = useParams<{id: string}>();

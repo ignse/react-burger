@@ -1,5 +1,5 @@
 import {getCookie} from '../../utils/cookie';
-import {AnyAction, Middleware} from "redux";
+import {Middleware} from "redux";
 
 export const socketMiddleware = (wsUrl: string, wsActions: {
   wsInit: string;
