@@ -22,6 +22,10 @@ const initialState: TWsOrders = {
 };
 
 describe('Action creators for ws orders', () => {
+  it('should return isinitialState', () => {
+    expect(wsOrdersReducer(undefined, {})).toEqual(initialState);
+  });
+
   it('should handle ws orders connection success', () => {
     expect(wsOrdersReducer(initialState, {type: WS_ORDERS_CONNECTION_SUCCESS})).toEqual({
       ...initialState,

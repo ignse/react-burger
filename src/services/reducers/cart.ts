@@ -4,7 +4,7 @@ import {
   MOVE_INGREDIENT,
   CLEAR_CART, TCartActions
 } from '../actions/cart';
-import {TIngredient} from "../types/data";
+import {IEmptyAction, TIngredient} from "../types/data";
 
 type TCartState = {
   bun: TIngredient | null;
@@ -20,7 +20,7 @@ const initialState: TCartState = {
   total: 0,
 };
 
-export const cartReducer = (state = initialState, action: TCartActions): TCartState => {
+export const cartReducer = (state = initialState, action: TCartActions | IEmptyAction): TCartState => {
 
   const calcTotal = (state: TCartState) => {
    return (state.items && state.items.length ? state.items.reduce((acc, p) => acc + p.price, 0) : 0)  + (state.bun ? state.bun.price *2 : 0);

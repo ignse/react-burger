@@ -26,7 +26,7 @@ import {
   USER_SAVE_FAILED, LOGOUT_USER_REQUEST, LOGOUT_USER_SUCCESS, LOGOUT_USER_FAILED, TUserActions
 } from '../actions/user';
 import {deleteCookie, setCookie} from '../../utils/cookie';
-import {TUser} from "../types/data";
+import {IEmptyAction, TUser} from "../types/data";
 
 type TUserState = {
   user: TUser;
@@ -109,7 +109,7 @@ const initialState: TUserState = {
   resetPasswordError: '',
 };
 
-export const userReducer = (state = initialState, action: TUserActions): TUserState => {
+export const userReducer = (state = initialState, action: TUserActions | IEmptyAction): TUserState => {
   switch (action.type) {
 
     case REGISTER_USER_REQUEST: {

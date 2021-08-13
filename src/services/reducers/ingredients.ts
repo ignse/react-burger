@@ -3,7 +3,7 @@ import {
   GET_INGREDIENTS_REQUEST,
   GET_INGREDIENTS_SUCCESS, TIngredientsActions,
 } from '../actions/ingredients';
-import {TIngredient} from "../types/data";
+import {IEmptyAction, TIngredient} from "../types/data";
 
 export type TIngredientsState = {
   items: Array<TIngredient>;
@@ -17,7 +17,7 @@ const initialState: TIngredientsState = {
   itemsFailed: false,
 };
 
-export const ingredientsReducer = (state = initialState, action: TIngredientsActions): TIngredientsState => {
+export const ingredientsReducer = (state = initialState, action: TIngredientsActions | IEmptyAction): TIngredientsState => {
   switch (action.type) {
     case GET_INGREDIENTS_REQUEST: {
       return { ...state, itemsRequest: true };

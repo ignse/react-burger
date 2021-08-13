@@ -4,6 +4,7 @@ import {
   SHOW_INGREDIENT_DETAILS,
   HIDE_INGREDIENT_DETAILS, TModalActions
 } from '../actions/modal';
+import {IEmptyAction} from "../types/data";
 
 type TModal = {
   ingredientDetailsVisible: boolean,
@@ -15,7 +16,7 @@ const initialState: TModal = {
   orderDetailsVisible: false
 };
 
-export const modalReducer = (state = initialState, action: TModalActions): TModal => {
+export const modalReducer = (state = initialState, action: TModalActions | IEmptyAction): TModal => {
   switch (action.type) {
     case SHOW_ORDER_DETAILS: {
       return {

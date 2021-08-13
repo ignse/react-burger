@@ -4,7 +4,7 @@ import {
   WS_ORDERS_CONNECTION_CLOSED,
   WS_ORDERS_GET_MESSAGE, TOrdersActions
 } from '../actions/wsOrdersActions';
-import {TOrder} from "../types/data";
+import {IEmptyAction, TOrder} from "../types/data";
 
 type TWsOrders = {
   wsConnected: boolean;
@@ -20,7 +20,7 @@ const initialState: TWsOrders = {
   totalToday: 0
 };
 
-export const wsOrdersReducer = (state = initialState, action: TOrdersActions): TWsOrders => {
+export const wsOrdersReducer = (state = initialState, action: TOrdersActions | IEmptyAction): TWsOrders => {
   switch (action.type) {
     case WS_ORDERS_CONNECTION_SUCCESS:
       return {

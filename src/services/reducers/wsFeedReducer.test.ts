@@ -22,6 +22,10 @@ const initialState: TWsFeed = {
 };
 
 describe('Action creators for ws feed', () => {
+  it('should return isinitialState', () => {
+    expect(wsFeedReducer(undefined, {})).toEqual(initialState);
+  });
+
   it('should handle ws feed connection success', () => {
     expect(wsFeedReducer(initialState, {type: WS_FEED_CONNECTION_SUCCESS})).toEqual({
       ...initialState,

@@ -22,6 +22,10 @@ const initialState: TCartState = {
 };
 
 describe('Action creators for cart test', () => {
+  it('should return isinitialState', () => {
+    expect(cartReducer(undefined, {})).toEqual(initialState);
+  });
+
   it('should add ingredient to the cart', () => {
 
     const ingredient: TIngredient = {

@@ -29,6 +29,10 @@ const initialState: TIngredientInfo = {
 };
 
 describe('Action creators for ingredient info test', () => {
+  it('should return isinitialState', () => {
+    expect(ingredientInfoReducer(undefined, {})).toEqual(initialState);
+  });
+
   it('should set ingredient detail', () => {
     expect(ingredientInfoReducer(initialState, {type: SET_INGREDIENT_DETAIL, payload: ingredient})).toEqual({...initialState, ingredient: ingredient});
   });

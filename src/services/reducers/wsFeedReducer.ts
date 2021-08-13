@@ -4,7 +4,7 @@ import {
   WS_FEED_CONNECTION_CLOSED,
   WS_FEED_GET_MESSAGE, TFeedActions
 } from '../actions/wsFeedActions';
-import {TOrder} from "../types/data";
+import {IEmptyAction, TOrder} from "../types/data";
 
 type TWsFeed = {
   wsConnected: boolean;
@@ -20,7 +20,7 @@ const initialState: TWsFeed = {
   totalToday: 0
 };
 
-export const wsFeedReducer = (state = initialState, action: TFeedActions): TWsFeed => {
+export const wsFeedReducer = (state = initialState, action: TFeedActions | IEmptyAction): TWsFeed => {
   switch (action.type) {
     case WS_FEED_CONNECTION_SUCCESS:
       return {

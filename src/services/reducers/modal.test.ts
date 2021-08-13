@@ -17,6 +17,10 @@ const initialState: TModal = {
 };
 
 describe('Action creators for modal test', () => {
+  it('should return isinitialState', () => {
+    expect(modalReducer(undefined, {})).toEqual(initialState);
+  });
+
   it('should handle show order details action', () => {
     expect(modalReducer(initialState, {type: SHOW_ORDER_DETAILS})).toEqual({
       ...initialState,

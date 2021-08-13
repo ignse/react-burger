@@ -13,6 +13,10 @@ const initialState: TIngredientsState = {
 };
 
 describe('Action creators for ingredients test', () => {
+  it('should return isinitialState', () => {
+    expect(ingredientsReducer(undefined, {})).toEqual(initialState);
+  });
+
   it('should handle ingredients request start', () => {
     expect(ingredientsReducer(initialState, {type: GET_INGREDIENTS_REQUEST})).toEqual({...initialState, itemsRequest: true});
   });

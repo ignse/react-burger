@@ -27,6 +27,10 @@ const initialState: TOrderState = {
 };
 
 describe('Action creators for order test', () => {
+  it('should return isinitialState', () => {
+    expect(orderReducer(undefined, {})).toEqual(initialState);
+  });
+
   it('should handle make order request', () => {
     expect(orderReducer(initialState, {type: MAKE_ORDER_REQUEST})).toEqual({...initialState, orderRequest: true});
   });

@@ -7,7 +7,7 @@ import {
   GET_ORDER_SUCCESS,
   GET_ORDER_FAILED, SET_ORDER_DETAIL, CLEAR_ORDER_DETAIL, TOrderActions
 } from '../actions/order';
-import {TOrder} from "../types/data";
+import {IEmptyAction, TOrder} from "../types/data";
 
 type TOrderState = {
   orderNumber: string,
@@ -25,7 +25,7 @@ const initialState: TOrderState = {
   order: null,
 };
 
-export const orderReducer = (state = initialState, action: TOrderActions): TOrderState => {
+export const orderReducer = (state = initialState, action: TOrderActions | IEmptyAction): TOrderState => {
   switch (action.type) {
     case MAKE_ORDER_REQUEST: {
       return { ...state, orderRequest: true, orderInvalid: false };

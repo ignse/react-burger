@@ -110,6 +110,10 @@ const initialState: TUserState = {
 };
 
 describe('Action creators for user test', () => {
+  it('should return isinitialState', () => {
+    expect(userReducer(undefined, {})).toEqual(initialState);
+  });
+
   it('should handle user register request', () => {
     expect(userReducer(initialState, {type: REGISTER_USER_REQUEST})).toEqual({
       ...initialState,

@@ -42,4 +42,8 @@ export type THeaderBtn = {
     exact?: boolean;
 };
 
+export interface IEmptyAction {
+    readonly type?: null;
+}
+
 export type RootState = ReturnType<typeof rootReducer>;
