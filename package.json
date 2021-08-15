@@ -1,4 +1,5 @@
 {
+  "homepage": "http://ignse.github.io/react-burger",
   "name": "react-burger",
   "version": "0.1.0",
   "private": true,
@@ -28,7 +29,7 @@
     "eject": "react-scripts eject",
     "cypress:open": "./node_modules/.bin/cypress open",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
